@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Valentine Proposal</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+}
+
+.card {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  width: 320px;
+  position: relative;
+}
+
+h2 {
+  color: #ff4d6d;
+  margin-bottom: 20px;
+}
+
+.buttons {
+  position: relative;
+  height: 100px;
+}
+
+button {
+  border: none;
+  padding: 12px 25px;
+  margin: 10px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#yes {
+  background: #ff4d6d;
+  color: white;
+}
+
+#yes:hover {
+  background: #e63956;
+}
+
+#no {
+  background: #ff8fa3;
+  color: white;
+  position: absolute;
+}
+
+/* Moving pleading message */
+.plead {
+  position: absolute;
+  font-size: 14px;
+  color: #ff4d6d;
+  pointer-events: none;
+}
+
+.message {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #28a745;
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="card">
+  <h2>Hey, will you be my Valentine? ❤️</h2>
+
+  <div class="buttons">
+    <button id="yes">Yes</button>
+    <button id="no">No</button>
+
+    <!-- Moving message -->
+    <div class="plead" id="pleadText"></div>
+  </div>
+
+  <div class="message" id="msg">
+    Yayyy ❤️ You made my day!
+  </div>
+</div>
+
+<script>
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+const msg = document.getElementById("msg");
+const card = document.getElementById("card");
+const pleadText = document.getElementById("pleadText");
+
+let lastX = 0;
+let lastY = 0;
+let messageIndex = 0;
+
+/* Messages list */
+const messages = [
+  "Don't do this 😢",
+  "Please…",
+  "Please please please 🙏",
+  "Nooo please 😭",
+  "Consider once 💔",
+  "Please say yes ❤️"
+];
+
+/* Move NO button far + move message with it */
+function moveNoButton() {
+  const cardRect = card.getBoundingClientRect();
+  const btnRect = noBtn.getBoundingClientRect();
+
+  let newX, newY, distance;
+
+  do {
+    newX = Math.random() * (cardRect.width - btnRect.width - 20);
+    newY = Math.random() * (cardRect.height - btnRect.height - 20);
+    distance = Math.sqrt((newX - lastX) ** 2 + (newY - lastY) ** 2);
+  } while (distance < 100);
+
+  lastX = newX;
+  lastY = newY;
+
+  /* Move NO button */
+  noBtn.style.left = newX + "px";
+  noBtn.style.top = newY + "px";
+
+  /* Update message text */
+  pleadText.textContent = messages[messageIndex];
+  messageIndex = (messageIndex + 1) % messages.length;
+
+  /* Move message near NO button */
+  pleadText.style.left = newX + "px";
+  pleadText.style.top = (newY - 25) + "px";
+}
+
+noBtn.addEventListener("mouseover", moveNoButton);
+
+/* YES click */
+yesBtn.addEventListener("click", () => {
+  msg.style.display = "block";
+  pleadText.textContent = "I knew it 😍❤️";
+  pleadText.style.left = "50%";
+  pleadText.style.top = "70%";
+  pleadText.style.transform = "translateX(-50%)";
+});
+</script>
+
+</body>
+</html>
